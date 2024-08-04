@@ -28,10 +28,11 @@ import (
 
 // the fe ports key
 const (
-	HTTP_PORT     = "http_port"
-	RPC_PORT      = "rpc_port"
-	QUERY_PORT    = "query_port"
-	EDIT_LOG_PORT = "edit_log_port"
+	HTTP_PORT             = "http_port"
+	RPC_PORT              = "rpc_port"
+	QUERY_PORT            = "query_port"
+	EDIT_LOG_PORT         = "edit_log_port"
+	ARROW_FLIGHT_SQL_PORT = "arrow_flight_sql_port"
 )
 
 // the cn or be ports key
@@ -41,6 +42,7 @@ const (
 	WEBSERVER_PORT         = "webserver_port"
 	HEARTBEAT_SERVICE_PORT = "heartbeat_service_port"
 	BRPC_PORT              = "brpc_port"
+	ARROW_FLIGHT_SQL_PORT  = "arrow_flight_sql_port"
 )
 
 // the default ResolveKey
