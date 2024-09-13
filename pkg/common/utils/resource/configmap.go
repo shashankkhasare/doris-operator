@@ -28,10 +28,11 @@ import (
 
 // the fe ports key
 const (
-	HTTP_PORT     = "http_port"
-	RPC_PORT      = "rpc_port"
-	QUERY_PORT    = "query_port"
-	EDIT_LOG_PORT = "edit_log_port"
+	HTTP_PORT             = "http_port"
+	RPC_PORT              = "rpc_port"
+	QUERY_PORT            = "query_port"
+	EDIT_LOG_PORT         = "edit_log_port"
+	ARROW_FLIGHT_SQL_PORT = "arrow_port"
 )
 
 // the cn or be ports key
@@ -75,6 +76,7 @@ var defMap = map[string]int32{
 	BRPC_PORT:              8060,
 	BROKER_IPC_PORT:        8000,
 	BRPC_LISTEN_PORT:       5000,
+	ARROW_FLIGHT_SQL_PORT:  9090,
 }
 
 // GetStartMode return fe host type, fqdn(host) or ip, from 'fe.conf' enable_fqdn_mode

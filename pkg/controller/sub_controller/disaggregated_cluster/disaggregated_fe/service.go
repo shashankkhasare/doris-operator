@@ -57,6 +57,7 @@ func newFEServicePorts(config map[string]interface{}, svcConf *dv1.ExportService
 	rpcPort := resource.GetPort(config, resource.RPC_PORT)
 	queryPort := resource.GetPort(config, resource.QUERY_PORT)
 	editPort := resource.GetPort(config, resource.EDIT_LOG_PORT)
+	arrowFlightSqlPort := resource.GetPort(config, resource.ARROW_FLIGHT_SQL_PORT)
 	ports := []corev1.ServicePort{
 		{
 			Port: httpPort, TargetPort: intstr.FromInt(int(httpPort)), Name: resource.GetPortKey(resource.HTTP_PORT),
@@ -66,6 +67,8 @@ func newFEServicePorts(config map[string]interface{}, svcConf *dv1.ExportService
 			Port: queryPort, TargetPort: intstr.FromInt(int(queryPort)), Name: resource.GetPortKey(resource.QUERY_PORT),
 		}, {
 			Port: editPort, TargetPort: intstr.FromInt(int(editPort)), Name: resource.GetPortKey(resource.EDIT_LOG_PORT),
+		}, {
+			Port: arrowFlightSqlPort, TargetPort: intstr.FromInt(int(arrowFlightSqlPort)), Name: resource.GetPortKey(resource.ARROW_FLIGHT_SQL_PORT),
 		}}
 
 	if svcConf == nil || svcConf.Type != corev1.ServiceTypeNodePort {

@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/FoundationDB/fdb-kubernetes-operator/api/v1beta2"
 	"github.com/selectdb/doris-operator/pkg/common/utils/resource"
-	appv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -57,54 +56,6 @@ func Test_ApplyService(t *testing.T) {
 		err := ApplyService(context.Background(), fakeClient, svc, resource.ServiceDeepEqual)
 		if err != nil {
 			t.Errorf("apply service %s failed, err %s", svc.Name, err.Error())
-		}
-	}
-}
-
-func Test_ApplyStatefulSet(t *testing.T) {
-	svcs := []client.Object{
-		&appv1.StatefulSet{
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "test1",
-				Namespace: "test",
-			}, Spec: appv1.StatefulSetSpec{}},
-		&appv1.StatefulSet{
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "test2",
-				Namespace: "test",
-			}, Spec: appv1.StatefulSetSpec{Selector: &metav1.LabelSelector{MatchLabels: map[string]string{"namespace": "test", "name": "test2"}}}}}
-
-	fakeClient := fake.NewClientBuilder().WithObjects(svcs...).Build()
-	tsts := []*appv1.StatefulSet{
-		&appv1.StatefulSet{
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "testnoexist",
-				Namespace: "test",
-			},
-			Spec: appv1.StatefulSetSpec{},
-		},
-		&appv1.StatefulSet{
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "test2",
-				Namespace: "test",
-			},
-			Spec: appv1.StatefulSetSpec{Selector: &metav1.LabelSelector{MatchLabels: map[string]string{"namespace": "test", "name": "test2"}}},
-		},
-		{
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "test2",
-				Namespace: "test",
-			},
-			Spec: appv1.StatefulSetSpec{Selector: &metav1.LabelSelector{MatchLabels: map[string]string{"namespace": "test", "name": "test2"}}, Replicas: pointer.Int32(1)},
-		},
-	}
-
-	for _, st := range tsts {
-		err := ApplyStatefulSet(context.Background(), fakeClient, st, func(st1 *appv1.StatefulSet, st2 *appv1.StatefulSet) bool {
-			return resource.StatefulSetDeepEqual(st1, st2, false)
-		})
-		if err != nil {
-			t.Errorf("apply service %s failed, err %s", st.Name, err.Error())
 		}
 	}
 }

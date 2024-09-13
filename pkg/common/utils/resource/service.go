@@ -170,6 +170,7 @@ func getFeServicePorts(config map[string]interface{}) (ports []corev1.ServicePor
 	rpcPort := GetPort(config, RPC_PORT)
 	queryPort := GetPort(config, QUERY_PORT)
 	editPort := GetPort(config, EDIT_LOG_PORT)
+	arrowFlightSqlPort := GetPort(config, ARROW_FLIGHT_SQL_PORT)
 	ports = append(ports, corev1.ServicePort{
 		Port: httpPort, TargetPort: intstr.FromInt(int(httpPort)), Name: GetPortKey(HTTP_PORT),
 	}, corev1.ServicePort{
@@ -177,7 +178,10 @@ func getFeServicePorts(config map[string]interface{}) (ports []corev1.ServicePor
 	}, corev1.ServicePort{
 		Port: queryPort, TargetPort: intstr.FromInt(int(queryPort)), Name: GetPortKey(QUERY_PORT),
 	}, corev1.ServicePort{
-		Port: editPort, TargetPort: intstr.FromInt(int(editPort)), Name: GetPortKey(EDIT_LOG_PORT)})
+		Port: editPort, TargetPort: intstr.FromInt(int(editPort)), Name: GetPortKey(EDIT_LOG_PORT),
+	}, corev1.ServicePort{
+		Port: arrowFlightSqlPort, TargetPort: intstr.FromInt(int(arrowFlightSqlPort)), Name: GetPortKey(ARROW_FLIGHT_SQL_PORT),
+	})
 
 	return
 }
@@ -187,6 +191,7 @@ func getBeServicePorts(config map[string]interface{}) (ports []corev1.ServicePor
 	webseverPort := GetPort(config, WEBSERVER_PORT)
 	heartPort := GetPort(config, HEARTBEAT_SERVICE_PORT)
 	brpcPort := GetPort(config, BRPC_PORT)
+	arrowFlightSqlPort := GetPort(config, ARROW_FLIGHT_SQL_PORT)
 
 	ports = append(ports, corev1.ServicePort{
 		Port: bePort, TargetPort: intstr.FromInt(int(bePort)), Name: GetPortKey(BE_PORT),
@@ -196,6 +201,8 @@ func getBeServicePorts(config map[string]interface{}) (ports []corev1.ServicePor
 		Port: heartPort, TargetPort: intstr.FromInt(int(heartPort)), Name: GetPortKey(HEARTBEAT_SERVICE_PORT),
 	}, corev1.ServicePort{
 		Port: brpcPort, TargetPort: intstr.FromInt(int(brpcPort)), Name: GetPortKey(BRPC_PORT),
+	}, corev1.ServicePort{
+		Port: arrowFlightSqlPort, TargetPort: intstr.FromInt(int(arrowFlightSqlPort)), Name: GetPortKey(ARROW_FLIGHT_SQL_PORT),
 	})
 
 	return
@@ -255,6 +262,10 @@ func getFeContainerPorts(config map[string]interface{}) []corev1.ContainerPort {
 		Name:          GetPortKey(EDIT_LOG_PORT),
 		ContainerPort: GetPort(config, EDIT_LOG_PORT),
 		Protocol:      corev1.ProtocolTCP,
+	}, {
+		Name:          GetPortKey(ARROW_FLIGHT_SQL_PORT),
+		ContainerPort: GetPort(config, ARROW_FLIGHT_SQL_PORT),
+		Protocol:      corev1.ProtocolTCP,
 	}}
 }
 
@@ -274,6 +285,10 @@ func getBeContainerPorts(config map[string]interface{}) []corev1.ContainerPort {
 		}, {
 			Name:          GetPortKey(BRPC_PORT),
 			ContainerPort: GetPort(config, BRPC_PORT),
+			Protocol:      corev1.ProtocolTCP,
+		}, {
+			Name:          GetPortKey(ARROW_FLIGHT_SQL_PORT),
+			ContainerPort: GetPort(config, ARROW_FLIGHT_SQL_PORT),
 			Protocol:      corev1.ProtocolTCP,
 		},
 	}
@@ -308,6 +323,8 @@ func GetPortKey(configKey string) string {
 		return strings.ReplaceAll(EDIT_LOG_PORT, "_", "-")
 	case BROKER_IPC_PORT:
 		return strings.ReplaceAll(BROKER_IPC_PORT, "_", "-")
+	case ARROW_FLIGHT_SQL_PORT:
+		return strings.ReplaceAll(ARROW_FLIGHT_SQL_PORT, "_", "-")
 	case BRPC_LISTEN_PORT:
 		return "brpc-port"
 	default:
